@@ -1,24 +1,38 @@
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-
-function Login() {
-    const handleSubmit = (e) =>{
-        e.preventDefault();
-        console.log(e.target.value)
-        // localStorage.setItem('name', name);
-
-    }
-    return (
-        <div className="App">
-            <form onSubmit={handleSubmit}>
-                <label>Name: <input type={"text"} name='name'></input></label>
-                <label>Password: <input type={"password"} ></input></label>
-                <input type={"submit"} Value="Login"></input>
-            </form>
-        <button>
-        <Link to="/home">Login</Link>  
-            </button>
-        </div>
-    );
-  }
+class Login extends Component {  
+  constructor(props) {  
+      super(props);  
+      this.state = {email: '', password:''};   
+      this.handleSubmit = this.handleSubmit.bind(this);  
+  }  
   
-  export default Login;
+  handleSubmit() {
+      //storing the value in session storage
+      sessionStorage.setItem('email', this.state.email);
+      sessionStorage.setItem('password', this.state.password);
+  }  
+  render() { 
+      return (  
+          <form>   
+            <label>  
+                Email:  
+                <input type="email" value={this.state.email} onChange={(event)=>{
+                    this.setState({email:event.target.value})
+                }} />  
+            </label>  
+            <label>  
+                Password:  
+                <input type="password" value={this.state.password} onChange={(event)=>{
+                    this.setState({password:event.target.value})
+                }} />  
+            </label>
+            <button disabled={this.state.password.length<8} onClick={()=>this.handleSubmit()}>
+                {this.state.password.length>=8?<Link to='/home'>Submit</Link>:'submit'}
+                </button>
+         </form>
+         
+      );  
+  }  
+} 
+export default Login;
